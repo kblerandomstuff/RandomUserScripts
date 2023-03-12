@@ -1,0 +1,61 @@
+// ==UserScript==
+// @name         XXFZDownloader
+// @namespace    https://krs.ovh/
+// @version      0.1
+// @description  try to take over the world!
+// @author       You
+// @match        https://boylove.cc/home/book/capter/id/*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=boylove.cc
+// @grant         GM_download
+// ==/UserScript==
+
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        setTimeout(function(){
+            let imgls=[];
+            let titlestr=document.title;
+            let title2ary=titlestr.split(" - ");
+            console.log(title2ary);
+            let title3ary=title2ary[0].split("] ");
+            title3ary[0]=title3ary[0].replace('[','');
+            title3ary[0]=title3ary[0].replaceAll(' ','');
+            title3ary[1]=title3ary[1].replaceAll('/','_');
+            title3ary[1]=title3ary[1].replaceAll(':','_');
+            title3ary[1]=title3ary[1].replaceAll('！','_');
+            let obj1=[];
+            for (let i = 1; i < 1000; i++) {
+                try{
+                    imgls.push(document.getElementById("webp"+i).getAttribute("data-original"));
+                }catch(err){
+                    console.log(err);
+                    console.log("end");
+                    break;
+                }
+            }
+            console.log(imgls);
+            var btn = document.createElement("button");
+            btn.innerHTML = "<h1 style='font-size: 48px'>Save<h1>";
+            btn.onclick = () => {
+                let fin=0;
+                for (let i = 0; i < imgls.length; i++){
+                    let istr = i;
+                    istr=istr.toString().padStart(3, '0');
+                    let file_type_ary = imgls[i].split(".");
+                    let file_type = file_type_ary[file_type_ary.length -1];
+                    if (file_type.includes("?v=")){file_type="jpg"};
+                    GM_download("https://boylove.cc"+imgls[i].replace(' ',''), "香香腐宅/"+title3ary[1]+"/"+title3ary[0]+"/"+istr+"."+file_type);
+                    console.log("ssss");
+                    fin=i;
+                };
+                var btn = document.createElement("button");
+                btn.innerHTML = "<h1 style='font-size: 48px'>"+fin.toString()+"</h1>";
+                document.querySelector(".panel").after(btn);
+            };
+            document.querySelector(".panel").after(btn);
+        }, 1000);
+    }, false);
+    // Your code here...
+})();
+
+
